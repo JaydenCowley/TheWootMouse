@@ -10,41 +10,70 @@ public class WootMouseEngine
     private readonly float _deadzone;
     private readonly float _maxSpeed;   // pixels per second at full press
     private readonly float _exponent;   // response curve
-
+    private readonly float _scrollSpeed;
+    
     public WootMouseEngine(
         float deadzone = 0.05f,
         float maxSpeed = 1200f,   // pixels per second
-        float exponent = 1.6f)
+        float exponent = 1.6f,
+        float scrollSpeed = 20f)
     {
         _deadzone = deadzone;
         _maxSpeed = maxSpeed;
         _exponent = exponent;
+        _scrollSpeed = scrollSpeed;
     }
-
-    public void Update(float deltaSeconds)
+    private void UpdateScroll(float deltaSeconds)
     {
-        // Only active when layer key is held (needs to be mapped to an actual key not Fn key)
-        // if (!KeyboardState.IsKeyDown(InputConfig.VkMouseLayer))
-        //     return;
+        float up = WootingAnalog.wooting_analog_read(InputConfig.KeyScrollUp);
+        float down = WootingAnalog.wooting_analog_read(InputConfig.KeyScrollDown);
 
+        float scroll = ApplyAxis(up, down); // -1..1
+
+        if (Math.Abs(scroll) < 0.0001f)
+            return;
+
+        // Pixels per second → convert to wheel ticks
+        float ticksPerSecond = scroll * _scrollSpeed;
+        float ticksThisFrame = ticksPerSecond * deltaSeconds;
+
+        int wheelDelta = (int)(ticksThisFrame * 120); // 120 = 1 wheel notch
+
+        if (wheelDelta != 0)
+            MouseController.Scroll(wheelDelta);
+    }
+    private void UpdateMouseCursor(float deltaSeconds)
+    {
         // Read analog values from physical keys
         float up    = WootingAnalog.wooting_analog_read_analog(InputConfig.KeyUp);
         float down  = WootingAnalog.wooting_analog_read_analog(InputConfig.KeyDown);
         float left  = WootingAnalog.wooting_analog_read_analog(InputConfig.KeyLeft);
         float right = WootingAnalog.wooting_analog_read_analog(InputConfig.KeyRight);
+        float scrollUp = WootingAnalog.wooting_analog_read_analog(InputConfig.KeyScrollUp);
+        float scrollDown = WootingAnalog.wooting_analog_read_analog(InputConfig.KeyScrollDown);
 
         float vertical   = ApplyAxis(down, up);    // -1..1
         float horizontal = ApplyAxis(right, left); // -1..1
 
         if (Math.Abs(vertical) < 0.0001f && Math.Abs(horizontal) < 0.0001f)
             return;
-
         // Convert to pixels this frame
         float pixelsPerFrame = _maxSpeed * deltaSeconds;
         int dx = (int)(horizontal * pixelsPerFrame);
         int dy = (int)(vertical   * pixelsPerFrame);
 
-        CursorController.MoveBy(dx, dy);
+        MouseController.MoveBy(dx, dy);
+    }
+
+    public void Update(float deltaSeconds)
+    {
+        // Only active when layer key is held (needs to be mapped to an actual key not Fn Layer key since not tracked in Wooting SDK)
+        // if (!KeyboardState.IsKeyDown(InputConfig.VkMouseLayer))
+        //     return;
+
+
+        UpdateMouseCursor(deltaSeconds);
+        UpdateScroll(deltaSeconds);
     }
 
     private float ApplyAxis(float positive, float negative)
