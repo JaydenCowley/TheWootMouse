@@ -4,10 +4,10 @@ using TheWootMouse.util;
 namespace TheWootMouse.Controllers;
 
 public class WootMouseEngine(
-    float deadzone = 0.05f,
-    float maxSpeed = 1200f, // pixels per second
-    float exponent = 1.6f,
-    float scrollSpeed = 20f)
+    float deadzone = Settings.Deadzone,
+    float maxSpeed = Settings.MaxSpeed, // pixels per second
+    float exponent = Settings.Exponent,
+    float scrollSpeed = Settings.ScrollSpeed)
 {
     // Smooth Scroll
     private float _scrollAccumulator = 0f;
