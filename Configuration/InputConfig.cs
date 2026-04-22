@@ -1,4 +1,6 @@
-namespace TheWootMouse.util;
+using TheWootMouse.inputs;
+
+namespace TheWootMouse.Configuration;
 
 public static class InputConfig
 {
@@ -7,6 +9,9 @@ public static class InputConfig
     public const int KeyRight = (int)KeyCodes.F14;
     public const int KeyDown  = (int)KeyCodes.F15;
     public const int KeyLeft  = (int)KeyCodes.F16;
+    
+    public const int KeyScrollUp = (int)KeyCodes.F17;
+    public const int KeyScrollDown = (int)KeyCodes.F18;
 
     // Virtual key for "mouse layer" (OS-level key)
     // Example: F18 (you can remap this in Wootility)
