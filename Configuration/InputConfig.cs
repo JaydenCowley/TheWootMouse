@@ -1,4 +1,6 @@
-namespace TheWootMouse.util;
+using TheWootMouse.inputs;
+
+namespace TheWootMouse.Configuration;
 
 public static class InputConfig
 {

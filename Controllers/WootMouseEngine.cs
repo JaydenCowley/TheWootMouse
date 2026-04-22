@@ -1,31 +1,21 @@
 using System.IO.Compression;
-using TheWootMouse.state;
+using TheWootMouse.Configuration;
+using TheWootMouse.inputs;
+using TheWootMouse.inputs.Windows;
 
 namespace TheWootMouse.util;
 
-using static KeyCodes;
-
-public class WootMouseEngine
+public class WootMouseEngine(
+    float deadzone = 0.05f,
+    float maxSpeed = 1200f, // pixels per second
+    float exponent = 1.6f,
+    float scrollSpeed = 20f)
 {
-    private readonly float _deadzone;
-    private readonly float _maxSpeed;   // pixels per second at full press
-    private readonly float _exponent;   // response curve
-    private readonly float _scrollSpeed;
-    
-    public WootMouseEngine(
-        float deadzone = 0.05f,
-        float maxSpeed = 1200f,   // pixels per second
-        float exponent = 1.6f,
-        float scrollSpeed = 20f)
-    {
-        _deadzone = deadzone;
-        _maxSpeed = maxSpeed;
-        _exponent = exponent;
-        _scrollSpeed = scrollSpeed;
-    }
-    
+    // pixels per second at full press
+    // response curve
+
     // Smooth Scroll
-    private static float _scrollAccumulator = 0f;
+    private float _scrollAccumulator = 0f;
     
     private void UpdateScroll(float deltaSeconds)
     {
@@ -38,7 +28,7 @@ public class WootMouseEngine
             return;
 
         // Pixels per second → convert to wheel ticks
-        float ticksPerSecond = scroll * _scrollSpeed;
+        float ticksPerSecond = scroll * scrollSpeed;
         _scrollAccumulator += ticksPerSecond * deltaSeconds * 120f;
         
         int wholeTicks = (int)_scrollAccumulator;
@@ -61,7 +51,7 @@ public class WootMouseEngine
         if (Math.Abs(vertical) < 0.0001f && Math.Abs(horizontal) < 0.0001f)
             return;
         // Convert to pixels this frame
-        float pixelsPerFrame = _maxSpeed * deltaSeconds;
+        float pixelsPerFrame = maxSpeed * deltaSeconds;
         int dx = (int)(horizontal * pixelsPerFrame);
         int dy = (int)(vertical   * pixelsPerFrame);
 
@@ -83,13 +73,13 @@ public class WootMouseEngine
     {
         float value = positive - negative; // Cancels out opposite directions
 
-        if (Math.Abs(value) < _deadzone)
+        if (Math.Abs(value) < deadzone)
             return 0f;
 
         float sign = Math.Sign(value);
-        float mag = (Math.Abs(value) - _deadzone) / (1f - _deadzone);
+        float mag = (Math.Abs(value) - deadzone) / (1f - deadzone);
         mag = Math.Clamp(mag, 0f, 1f);
-        mag = (float)Math.Pow(mag, _exponent);
+        mag = (float)Math.Pow(mag, exponent);
 
         return sign * mag;
     }

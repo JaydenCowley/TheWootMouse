@@ -1,4 +1,4 @@
-namespace TheWootMouse.state;
+namespace TheWootMouse.inputs.Windows;
 
 using System.Runtime.InteropServices;
 

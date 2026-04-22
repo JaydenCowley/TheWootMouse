@@ -1,4 +1,4 @@
-namespace TheWootMouse.util;
+namespace TheWootMouse.inputs;
 
 public enum KeyCodes
 {
