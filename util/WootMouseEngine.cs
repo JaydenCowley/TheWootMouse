@@ -23,6 +23,10 @@ public class WootMouseEngine
         _exponent = exponent;
         _scrollSpeed = scrollSpeed;
     }
+    
+    // Smooth Scroll
+    private static float _scrollAccumulator = 0f;
+    
     private void UpdateScroll(float deltaSeconds)
     {
         float up = WootingSDK.wooting_analog_read_analog(InputConfig.KeyScrollUp);
@@ -35,12 +39,13 @@ public class WootMouseEngine
 
         // Pixels per second → convert to wheel ticks
         float ticksPerSecond = scroll * _scrollSpeed;
-        float ticksThisFrame = ticksPerSecond * deltaSeconds;
+        _scrollAccumulator += ticksPerSecond * deltaSeconds * 120f;
+        
+        int wholeTicks = (int)_scrollAccumulator;
 
-        int wheelDelta = (int)(ticksThisFrame * 120); // 120 = 1 wheel notch
-
-        if (wheelDelta != 0)
-            MouseController.Scroll(wheelDelta);
+        if (wholeTicks == 0) return;
+        MouseController.Scroll(wholeTicks);
+        _scrollAccumulator -= wholeTicks;
     }
     private void UpdateMouseCursor(float deltaSeconds)
     {
@@ -49,8 +54,6 @@ public class WootMouseEngine
         float down  = WootingSDK.wooting_analog_read_analog(InputConfig.KeyDown);
         float left  = WootingSDK.wooting_analog_read_analog(InputConfig.KeyLeft);
         float right = WootingSDK.wooting_analog_read_analog(InputConfig.KeyRight);
-        float scrollUp = WootingSDK.wooting_analog_read_analog(InputConfig.KeyScrollUp);
-        float scrollDown = WootingSDK.wooting_analog_read_analog(InputConfig.KeyScrollDown);
 
         float vertical   = ApplyAxis(down, up);    // -1..1
         float horizontal = ApplyAxis(right, left); // -1..1
@@ -78,7 +81,7 @@ public class WootMouseEngine
 
     private float ApplyAxis(float positive, float negative)
     {
-        float value = positive - negative; // -1..1
+        float value = positive - negative; // Cancels out opposite directions
 
         if (Math.Abs(value) < _deadzone)
             return 0f;

@@ -4,8 +4,9 @@ using System.Runtime.InteropServices;
 
 public static partial class MouseController
 {
+    // Scroll Logic
     [StructLayout(LayoutKind.Sequential)]
-    private struct MouseInputData
+    private struct MouseScrollData
     {
         public uint type;
         public MouseInput mi;
@@ -26,11 +27,11 @@ public static partial class MouseController
     private const uint MouseWheelEvent = 0x0800;
 
     [LibraryImport("user32.dll")]
-    private static partial uint SendInput(uint nInputs, MouseInputData[] pInputs, int cbSize);
+    private static partial uint SendInput(uint nInputs, MouseScrollData[] pInputs, int cbSize);
 
     public static void Scroll(int delta)
     {
-        var input = new MouseInputData
+        var input = new MouseScrollData
         {
             type = MouseWheelScroll,
             mi = new MouseInput
@@ -40,7 +41,7 @@ public static partial class MouseController
             }
         };
 
-        SendInput(1, [input], Marshal.SizeOf<MouseInputData>());
+        SendInput(1, [input], Marshal.SizeOf<MouseScrollData>());
     }
 
     // Cursor logic
