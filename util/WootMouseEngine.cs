@@ -25,8 +25,8 @@ public class WootMouseEngine
     }
     private void UpdateScroll(float deltaSeconds)
     {
-        float up = WootingAnalog.wooting_analog_read(InputConfig.KeyScrollUp);
-        float down = WootingAnalog.wooting_analog_read(InputConfig.KeyScrollDown);
+        float up = WootingSDK.wooting_analog_read_analog(InputConfig.KeyScrollUp);
+        float down = WootingSDK.wooting_analog_read_analog(InputConfig.KeyScrollDown);
 
         float scroll = ApplyAxis(up, down); // -1..1
 
@@ -45,12 +45,12 @@ public class WootMouseEngine
     private void UpdateMouseCursor(float deltaSeconds)
     {
         // Read analog values from physical keys
-        float up    = WootingAnalog.wooting_analog_read_analog(InputConfig.KeyUp);
-        float down  = WootingAnalog.wooting_analog_read_analog(InputConfig.KeyDown);
-        float left  = WootingAnalog.wooting_analog_read_analog(InputConfig.KeyLeft);
-        float right = WootingAnalog.wooting_analog_read_analog(InputConfig.KeyRight);
-        float scrollUp = WootingAnalog.wooting_analog_read_analog(InputConfig.KeyScrollUp);
-        float scrollDown = WootingAnalog.wooting_analog_read_analog(InputConfig.KeyScrollDown);
+        float up    = WootingSDK.wooting_analog_read_analog(InputConfig.KeyUp);
+        float down  = WootingSDK.wooting_analog_read_analog(InputConfig.KeyDown);
+        float left  = WootingSDK.wooting_analog_read_analog(InputConfig.KeyLeft);
+        float right = WootingSDK.wooting_analog_read_analog(InputConfig.KeyRight);
+        float scrollUp = WootingSDK.wooting_analog_read_analog(InputConfig.KeyScrollUp);
+        float scrollDown = WootingSDK.wooting_analog_read_analog(InputConfig.KeyScrollDown);
 
         float vertical   = ApplyAxis(down, up);    // -1..1
         float horizontal = ApplyAxis(right, left); // -1..1

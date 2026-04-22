@@ -2,10 +2,10 @@ namespace TheWootMouse.state;
 
 using System.Runtime.InteropServices;
 
-public static class KeyboardState
+public static partial class KeyboardState
 {
-    [DllImport("user32.dll")]
-    private static extern short GetAsyncKeyState(int virtualKey);
+    [LibraryImport("user32.dll")]
+    private static partial short GetAsyncKeyState(int virtualKey);
 
     public static bool IsKeyDown(int virtualKey)
     {

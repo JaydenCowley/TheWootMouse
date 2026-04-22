@@ -3,11 +3,11 @@ namespace TheWootMouse.util;
 using System;
 using System.Runtime.InteropServices;
 
-public static class KeyLogger
+public static partial class KeyLogger
 {
     // --- Virtual Key Logger (Windows-level keys) ---
-    [DllImport("user32.dll")]
-    private static extern short GetAsyncKeyState(int vKey);
+    [LibraryImport("user32.dll")]
+    private static partial short GetAsyncKeyState(int vKey);
 
     public static void LogVirtualKeys()
     {
@@ -23,7 +23,7 @@ public static class KeyLogger
     {
         for (int hid = 0; hid < 256; hid++)
         {
-            float v = WootingAnalog.wooting_analog_read_analog(hid);
+            float v = WootingSDK.wooting_analog_read_analog(hid);
             if (v > 0.01f)
                 Console.WriteLine($"HID {hid:X2} = {v}");
         }

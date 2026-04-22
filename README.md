@@ -23,12 +23,14 @@ depth.
 
 The following keys are currently mapped to mouse movement:
 
-| Key | Direction |
-|-----|-----------|
-| F13 | Up        |
-| F14 | Right     |
-| F15 | Down      |
-| F16 | Left      |
+| Key | Direction   |
+|-----|-------------|
+| F13 | Up          |
+| F14 | Right       |
+| F15 | Down        |
+| F16 | Left        |
+| F17 | Scroll Up   |
+| F18 | Scroll Down |
 
 **Note**: These bindings are currently hardcoded but will be user-configurable in future releases.
 

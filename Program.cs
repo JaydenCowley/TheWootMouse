@@ -7,7 +7,7 @@ class Program
 {
     static void Main()
     {
-        if (!WootingAnalog.wooting_analog_initialise())
+        if (!WootingSDK.wooting_analog_initialise())
         {
             Console.WriteLine("Failed to initialize Wooting Analog SDK");
             return;
