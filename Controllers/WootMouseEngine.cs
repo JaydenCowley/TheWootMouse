@@ -1,9 +1,7 @@
-using System.IO.Compression;
 using TheWootMouse.Configuration;
-using TheWootMouse.inputs;
-using TheWootMouse.inputs.Windows;
+using TheWootMouse.util;
 
-namespace TheWootMouse.util;
+namespace TheWootMouse.Controllers;
 
 public class WootMouseEngine(
     float deadzone = 0.05f,
@@ -11,9 +9,6 @@ public class WootMouseEngine(
     float exponent = 1.6f,
     float scrollSpeed = 20f)
 {
-    // pixels per second at full press
-    // response curve
-
     // Smooth Scroll
     private float _scrollAccumulator = 0f;
     

@@ -1,6 +1,6 @@
-namespace TheWootMouse.util;
-
 using System.Runtime.InteropServices;
+
+namespace TheWootMouse.Controllers;
 
 public static partial class MouseController
 {
