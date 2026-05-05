@@ -1,4 +1,4 @@
-namespace TheWootMouse.inputs;
+namespace TheWootMouse.infrastructure;
 
 public enum KeyCodes
 {
@@ -8,5 +8,7 @@ public enum KeyCodes
     F16 = 0x6B,
     F17 = 0x6C,
     F18 = 0x6D,
-    F24 = 0x7D
+    F24 = 0x7D,
+    Caps = 0x14,
+    LeftShift = 0xE1,
 }

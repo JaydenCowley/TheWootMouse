@@ -1,4 +1,4 @@
-using TheWootMouse.inputs;
+using TheWootMouse.infrastructure;
 
 namespace TheWootMouse.Configuration;
 
@@ -15,5 +15,7 @@ public static class InputConfig
 
     // Virtual key for "mouse layer" (OS-level key)
     // Example: F18 (you can remap this in Wootility)
-    public const int MouseLayer = (int)KeyCodes.F24;
+    public const int MouseLayerKey = (int)KeyCodes.F24;
+    public const int TurboKey = (int)KeyCodes.LeftShift;
+    // modifier setting for speed control preference variable slow/fast modifier key(turbo)
 }

@@ -1,7 +1,7 @@
-namespace TheWootMouse.util;
-
-using System;
 using System.Runtime.InteropServices;
+using TheWootMouse.util;
+
+namespace TheWootMouse.Controllers;
 
 public static partial class KeyLogger
 {
