@@ -1,3 +1,6 @@
+using System;
+using System.Net.Mime;
+
 namespace WootMouseSettingsUI;
 
 static class Program
