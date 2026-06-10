@@ -1,4 +1,5 @@
 using TheWootMouse.Configuration;
+using TheWootMouse.inputs.Windows;
 using TheWootMouse.util;
 
 namespace TheWootMouse.Controllers;
@@ -56,8 +57,8 @@ public class WootMouseEngine(
     public void Update(float deltaSeconds)
     {
         // Only active when layer key is held (needs to be mapped to an actual key not Fn Layer key since not tracked in Wooting SDK)
-        // if (!KeyboardState.IsKeyDown(InputConfig.VkMouseLayer))
-        //     return;
+        if (!KeyboardState.IsKeyDown(InputConfig.MouseLayer))
+            return;
 
 
         UpdateMouseCursor(deltaSeconds);

@@ -15,5 +15,5 @@ public static class InputConfig
 
     // Virtual key for "mouse layer" (OS-level key)
     // Example: F18 (you can remap this in Wootility)
-    public const int MouseLayer = (int)KeyCodes.F24;
+    public const int MouseLayer = (int)KeyCodes.F19;
 }
