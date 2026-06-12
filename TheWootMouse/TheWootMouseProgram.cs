@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using TheWootMouse.Controllers;
-using TheWootMouse.util;
+using TheWootMouse.Infrastructure.Wooting;
 
 namespace TheWootMouse;
 
@@ -8,7 +8,7 @@ internal abstract class TheWootMouseProgram
 {
     private static void Main()
     {
-        if (!WootingSDK.wooting_analog_initialise())
+        if (!WootingSdk.wooting_analog_initialise())
         {
             Console.WriteLine("Failed to initialize Wooting Analog SDK");
             return;
