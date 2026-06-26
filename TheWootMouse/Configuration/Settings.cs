@@ -6,5 +6,5 @@ public class Settings
     public const float MaxSpeed = 1200f;
     public const float Exponent = 2f;
     public const float ScrollSpeed = 20f;
-    public const float TurboMultiplier = 3f;
+    public const float TurboMultiplier = 2f;
 }

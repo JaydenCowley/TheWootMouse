@@ -16,7 +16,7 @@ public static class InputConfig
 
     // Virtual key for "mouse layer" (OS-level key)l
     // Example: F18 (you can remap this in Wootility)
-    public const int TurboKey = (int)KeyCodes.F20;
+    public const int TurboKey = (int)KeyCodes.LeftShift;
     // public const int TurboKey = (int)KeyCodes.LeftShift;
     // modifier setting for speed control preference variable slow/fast modifier key(turbo)
 }

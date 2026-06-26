@@ -6,6 +6,17 @@
         <Nullable>enable</Nullable>
         <UseWindowsForms>true</UseWindowsForms>
         <ImplicitUsings>enable</ImplicitUsings>
+        <RootNamespace>WootMouseSettingsUI</RootNamespace>
     </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\TheWootMouse\TheWootMouse.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\TheWootMouse\Infrastructure\Wooting\wooting_analog_sdk.dll" Link="wooting_analog_sdk.dll">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
 
 </Project>
