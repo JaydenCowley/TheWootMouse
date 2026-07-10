@@ -19,4 +19,12 @@ public class WootMouseEngineSettings
     public int MaxMouseScrollSpeed{ get; init;}
     public int MouseTurboSpeedMultiplier{ get; init;}
     public int MouseCurvePower{ get; init;}
+
+    // Pixel-density profiles.
+    // MaxMouseSpeed is interpreted as px/s at ReferencePpi; the active profile scales it by
+    // (profile.Ppi / ReferencePpi) so perceived cursor speed stays constant across screens.
+    public double ReferencePpi { get; init; } = 96.0;
+    public bool AutoSwitchProfileByMonitor { get; init; }
+    public string? ActiveProfileName { get; init; }
+    public List<DensityProfile> DensityProfiles { get; init; } = new();
 }
