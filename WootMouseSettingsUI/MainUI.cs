@@ -58,7 +58,7 @@ public partial class MainUI : Form
 
     private void LoadFromDisk()
     {
-        var s = SettingsManager.Load() ?? new WootMouseEngineSettings();
+        var s = SettingsManager.Load();
         ApplySettingsToUi(s);
     }
 

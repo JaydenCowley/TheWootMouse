@@ -1,28 +1,33 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+using TheWootMouse.Configuration;
 using TheWootMouse.Controllers;
 using TheWootMouse.Infrastructure.Wooting;
 
 namespace TheWootMouse;
 
-internal abstract class TheWootMouseProgram
+internal abstract partial class TheWootMouseProgram
 {
+    // Per-monitor DPI aware v2, so monitor DPI queries report each screen's real scaling.
+    private static readonly IntPtr DpiAwarePerMonitorV2 = new(-4);
+
+    [LibraryImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static partial bool SetProcessDpiAwarenessContext(IntPtr value);
+
     private static void Main()
     {
+        try { SetProcessDpiAwarenessContext(DpiAwarePerMonitorV2); }
+        catch { /* older Windows without this API — density auto-switch simply falls back. */ }
+
         if (!WootingSdk.wooting_analog_initialise())
         {
             Console.WriteLine("Failed to initialize Wooting Analog SDK");
             return;
         }
 
-        // Console.WriteLine("Wooting SDK initialized");
-        // Console.WriteLine("Keys Assigned to mouse movement: ");
-        // Console.WriteLine($"Up: {KeyCodes.F13}, Right: {KeyCodes.F14}, Down: {KeyCodes.F15}, Left: {KeyCodes.F16}");
-
-        var engine = new WootMouseEngine(
-            deadzone: 0.05f,
-            maxSpeed: 1400f,  // tune this
-            exponent: 1.6f
-        );
+        var settings = SettingsManager.Load();
+        var engine = new WootMouseEngine(settings);
 
         var stopwatch = Stopwatch.StartNew();
         long lastTicks = stopwatch.ElapsedTicks;
@@ -30,10 +35,9 @@ internal abstract class TheWootMouseProgram
 
         while (true)
         {
-            // KeyLogger.LogVirtualKeys();
-            // KeyLogger.LogHidAnalog();
-
-            const float deltaSeconds = 0.01f;
+            long now = stopwatch.ElapsedTicks;
+            float deltaSeconds = (float)((now - lastTicks) / tickFreq);
+            lastTicks = now;
 
             engine.Update(deltaSeconds);
 
