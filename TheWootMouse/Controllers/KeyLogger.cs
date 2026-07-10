@@ -1,5 +1,5 @@
 using System.Runtime.InteropServices;
-using TheWootMouse.util;
+using TheWootMouse.Infrastructure.Wooting;
 
 namespace TheWootMouse.Controllers;
 
@@ -23,7 +23,7 @@ public static partial class KeyLogger
     {
         for (int hid = 0; hid < 256; hid++)
         {
-            float v = WootingSDK.wooting_analog_read_analog(hid);
+            float v = WootingSdk.wooting_analog_read_analog(hid);
             if (v > 0.01f)
                 Console.WriteLine($"HID {hid:X2} = {v}");
         }

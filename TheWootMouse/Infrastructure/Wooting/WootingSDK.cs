@@ -1,8 +1,8 @@
 using System.Runtime.InteropServices;
 
-namespace TheWootMouse.util;
+namespace TheWootMouse.Infrastructure.Wooting;
 
-public static partial class WootingSDK
+public static partial class WootingSdk
 {
     private const string DllName = "wooting_analog_sdk.dll";
 

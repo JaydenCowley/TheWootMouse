@@ -60,7 +60,7 @@ public static partial class MouseController
         public int Y;
     }
 
-    public static void MoveBy(int dx, int dy)
+    public static void MoveCursorBy(int dx, int dy)
     {
         GetCursorPos(out var p);
         SetCursorPos(p.X + dx, p.Y + dy);

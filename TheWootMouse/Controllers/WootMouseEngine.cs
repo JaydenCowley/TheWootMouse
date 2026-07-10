@@ -1,5 +1,6 @@
 using TheWootMouse.Configuration;
-using TheWootMouse.util;
+using TheWootMouse.Infrastructure.Windows;
+using TheWootMouse.Infrastructure.Wooting;
 
 namespace TheWootMouse.Controllers;
 
@@ -15,17 +16,25 @@ public class WootMouseEngine(
     
     private void UpdateScroll(float deltaSeconds)
     {
-        float up = WootingSDK.wooting_analog_read_analog(InputConfig.KeyScrollUp);
-        float down = WootingSDK.wooting_analog_read_analog(InputConfig.KeyScrollDown);
-
+        float up = WootingSdk.wooting_analog_read_analog(InputConfig.KeyScrollUp);
+        float down = WootingSdk.wooting_analog_read_analog(InputConfig.KeyScrollDown);
+        float turbo = WootingSdk.wooting_analog_read_analog(InputConfig.TurboKey);
         float scroll = ApplyAxis(up, down); // -1..1
 
         if (Math.Abs(scroll) < 0.0001f)
             return;
 
         // Pixels per second → convert to wheel ticks
-        float ticksPerSecond = scroll * scrollSpeed;
-        _scrollAccumulator += ticksPerSecond * deltaSeconds * 120f;
+        if (turbo > 0.0001f)
+        {
+            float ticksPerSecond = scroll * scrollSpeed * turboMultiplier;
+            _scrollAccumulator += ticksPerSecond * deltaSeconds * 120f;
+        }
+        else
+        {
+            float ticksPerSecond = scroll * scrollSpeed;
+            _scrollAccumulator += ticksPerSecond * deltaSeconds * 120f;
+        }
         
         int wholeTicks = (int)_scrollAccumulator;
 
@@ -35,12 +44,11 @@ public class WootMouseEngine(
     }
     private void UpdateMouseCursor(float deltaSeconds)
     {
-        // Read analog values from physical keys
-        float up    = WootingSDK.wooting_analog_read_analog(InputConfig.KeyUp);
-        float down  = WootingSDK.wooting_analog_read_analog(InputConfig.KeyDown);
-        float left  = WootingSDK.wooting_analog_read_analog(InputConfig.KeyLeft);
-        float right = WootingSDK.wooting_analog_read_analog(InputConfig.KeyRight);
-        float turbo = WootingSDK.wooting_analog_read_analog(InputConfig.TurboKey);
+        float up    = WootingSdk.wooting_analog_read_analog(InputConfig.KeyUp);
+        float down  = WootingSdk.wooting_analog_read_analog(InputConfig.KeyDown);
+        float left  = WootingSdk.wooting_analog_read_analog(InputConfig.KeyLeft);
+        float right = WootingSdk.wooting_analog_read_analog(InputConfig.KeyRight);
+        float turbo = WootingSdk.wooting_analog_read_analog(InputConfig.TurboKey);
         
         float vertical   = ApplyAxis(down, up);    // -1..1
         float horizontal = ApplyAxis(right, left); // -1..1
@@ -58,16 +66,13 @@ public class WootMouseEngine(
         int dx = (int)(horizontal * pixelsPerFrame);
         int dy = (int)(vertical   * pixelsPerFrame);
 
-        MouseController.MoveBy(dx, dy);
+        MouseController.MoveCursorBy(dx, dy);
     }
 
     public void Update(float deltaSeconds)
     {
-        // Only active when layer key is held (needs to be mapped to an actual key not Fn Layer key since not tracked in Wooting SDK)
-        // if (!KeyboardState.IsKeyDown(InputConfig.VkMouseLayer))
-        //     return;
-
-
+        float enable = WootingSdk.wooting_analog_read_analog(InputConfig.KeyEnable);
+        if (enable < 0.0001f) return;
         UpdateMouseCursor(deltaSeconds);
         UpdateScroll(deltaSeconds);
     }
