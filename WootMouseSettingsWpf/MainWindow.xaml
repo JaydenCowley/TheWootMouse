@@ -1,0 +1,264 @@
+<Window x:Class="WootMouseSettingsWpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ctl="clr-namespace:WootMouseSettingsWpf.Controls"
+        Title="WootMouse Settings" Height="720" Width="1000"
+        MinHeight="600" MinWidth="900"
+        Background="{StaticResource BgBrush}"
+        UseLayoutRounding="True"
+        FontFamily="Segoe UI">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- ===== Header ===== -->
+        <Grid Grid.Row="0" Margin="0,0,0,16">
+            <StackPanel>
+                <TextBlock Text="WootMouse" FontSize="24" FontWeight="Bold"/>
+                <TextBlock Text="Analog cursor control settings" Foreground="{StaticResource TextSecondaryBrush}" FontSize="13"/>
+            </StackPanel>
+            <Border HorizontalAlignment="Right" VerticalAlignment="Center" CornerRadius="14" Padding="12,6"
+                    Background="{StaticResource SurfaceBrush}" BorderThickness="1" BorderBrush="{StaticResource BorderBrush}">
+                <StackPanel Orientation="Horizontal">
+                    <Ellipse Width="9" Height="9" VerticalAlignment="Center" Margin="0,0,8,0">
+                        <Ellipse.Style>
+                            <Style TargetType="Ellipse">
+                                <Setter Property="Fill" Value="{StaticResource DangerBrush}"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SdkConnected}" Value="True">
+                                        <Setter Property="Fill" Value="#4ADE80"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Ellipse.Style>
+                    </Ellipse>
+                    <TextBlock Text="{Binding SdkStatusText}" VerticalAlignment="Center" FontSize="12"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <!-- ===== Body ===== -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.1*"/>
+                <ColumnDefinition Width="16"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Left: bindings + behaviour -->
+            <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" Padding="0,0,6,0">
+                <StackPanel>
+
+                    <!-- Key bindings -->
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock Text="Key Bindings" Style="{StaticResource SectionTitle}"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="130"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="12"/>
+                                    <ColumnDefinition Width="130"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="10"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="10"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="10"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="Move Up" Style="{StaticResource FieldLabel}"/>
+                                <ComboBox   Grid.Row="0" Grid.Column="1" ItemsSource="{Binding AvailableKeys}" SelectedItem="{Binding KeyUp}"/>
+                                <TextBlock Grid.Row="0" Grid.Column="3" Text="Move Down" Style="{StaticResource FieldLabel}"/>
+                                <ComboBox   Grid.Row="0" Grid.Column="4" ItemsSource="{Binding AvailableKeys}" SelectedItem="{Binding KeyDown}"/>
+
+                                <TextBlock Grid.Row="2" Grid.Column="0" Text="Move Left" Style="{StaticResource FieldLabel}"/>
+                                <ComboBox   Grid.Row="2" Grid.Column="1" ItemsSource="{Binding AvailableKeys}" SelectedItem="{Binding KeyLeft}"/>
+                                <TextBlock Grid.Row="2" Grid.Column="3" Text="Move Right" Style="{StaticResource FieldLabel}"/>
+                                <ComboBox   Grid.Row="2" Grid.Column="4" ItemsSource="{Binding AvailableKeys}" SelectedItem="{Binding KeyRight}"/>
+
+                                <TextBlock Grid.Row="4" Grid.Column="0" Text="Scroll Up" Style="{StaticResource FieldLabel}"/>
+                                <ComboBox   Grid.Row="4" Grid.Column="1" ItemsSource="{Binding AvailableKeys}" SelectedItem="{Binding KeyScrollUp}"/>
+                                <TextBlock Grid.Row="4" Grid.Column="3" Text="Scroll Down" Style="{StaticResource FieldLabel}"/>
+                                <ComboBox   Grid.Row="4" Grid.Column="4" ItemsSource="{Binding AvailableKeys}" SelectedItem="{Binding KeyScrollDown}"/>
+
+                                <TextBlock Grid.Row="6" Grid.Column="0" Text="Turbo" Style="{StaticResource FieldLabel}"/>
+                                <ComboBox   Grid.Row="6" Grid.Column="1" ItemsSource="{Binding AvailableKeys}" SelectedItem="{Binding KeyTurbo}"/>
+                                <TextBlock Grid.Row="6" Grid.Column="3" Text="Mouse Layer Key" Style="{StaticResource FieldLabel}"/>
+                                <ComboBox   Grid.Row="6" Grid.Column="4" ItemsSource="{Binding AvailableKeys}" SelectedItem="{Binding MouseLayerKey}"/>
+                            </Grid>
+                            <CheckBox Content="Require mouse-layer key to be held" IsChecked="{Binding MouseLayerEnabled}" Margin="0,16,0,0"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Mouse behaviour -->
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock Text="Mouse Behavior" Style="{StaticResource SectionTitle}"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="70"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="14"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="14"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="14"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="Deadzone" Style="{StaticResource FieldLabel}"/>
+                                <Slider Grid.Row="0" Grid.Column="1" Minimum="0" Maximum="1" SmallChange="0.01" LargeChange="0.05"
+                                        Value="{Binding Deadzone}" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding DeadzoneText}" HorizontalAlignment="Right"
+                                           VerticalAlignment="Center" FontFamily="Consolas"/>
+
+                                <TextBlock Grid.Row="2" Grid.Column="0" Text="Max Speed (px/s)" Style="{StaticResource FieldLabel}"/>
+                                <TextBox   Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"
+                                           Text="{Binding MaxSpeed, UpdateSourceTrigger=LostFocus}"/>
+
+                                <TextBlock Grid.Row="4" Grid.Column="0" Text="Scroll Speed" Style="{StaticResource FieldLabel}"/>
+                                <TextBox   Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2"
+                                           Text="{Binding ScrollSpeed, UpdateSourceTrigger=LostFocus}"/>
+
+                                <TextBlock Grid.Row="6" Grid.Column="0" Text="Turbo Multiplier" Style="{StaticResource FieldLabel}"/>
+                                <TextBox   Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2"
+                                           Text="{Binding TurboMultiplier, UpdateSourceTrigger=LostFocus}"/>
+                            </Grid>
+                            <Grid Margin="0,14,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Curve Power" Style="{StaticResource FieldLabel}"/>
+                                <TextBox   Grid.Column="1" Text="{Binding CurvePower, UpdateSourceTrigger=LostFocus}"/>
+                            </Grid>
+                            <TextBlock Text="Max speed is measured at the reference PPI and scaled per screen by the active density profile."
+                                       Foreground="{StaticResource TextSecondaryBrush}" TextWrapping="Wrap" FontSize="12" Margin="0,14,0,0"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- Right: preview + density profiles -->
+            <ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto" Padding="0,0,6,0">
+                <StackPanel>
+
+                    <!-- Analog preview -->
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock Text="Analog Preview" Style="{StaticResource SectionTitle}"/>
+                            <ctl:AnalogStickView Height="240"
+                                                 StickX="{Binding PreviewX}" StickY="{Binding PreviewY}"
+                                                 Deadzone="{Binding PreviewDeadzone}"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Density profiles -->
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock Text="Pixel-Density Profiles" Style="{StaticResource SectionTitle}"/>
+
+                            <CheckBox Content="Auto-switch profile based on the monitor the cursor is on"
+                                      IsChecked="{Binding AutoSwitchByMonitor}"/>
+
+                            <Grid Margin="0,14,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="130"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Reference PPI" Style="{StaticResource FieldLabel}"/>
+                                <TextBox   Grid.Column="1" Text="{Binding ReferencePpi, UpdateSourceTrigger=LostFocus}"/>
+                            </Grid>
+
+                            <ListBox Margin="0,14,0,0" Height="130" ItemsSource="{Binding Profiles}"
+                                     SelectedItem="{Binding SelectedProfile}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding Name}" FontWeight="SemiBold"/>
+                                            <TextBlock Text="{Binding Summary}" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                <Button Content="Add" Command="{Binding AddProfileCommand}" Margin="0,0,8,0"/>
+                                <Button Content="Delete" Command="{Binding DeleteProfileCommand}" Margin="0,0,8,0"/>
+                                <Button Content="Detect Monitors" Command="{Binding DetectMonitorsCommand}"/>
+                            </StackPanel>
+
+                            <!-- Edit selected profile -->
+                            <Border Margin="0,14,0,0" Padding="14" CornerRadius="8"
+                                    Background="{StaticResource SurfaceAltBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                                    IsEnabled="{Binding HasSelectedProfile}">
+                                <StackPanel>
+                                    <TextBlock Text="Selected profile" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" Margin="0,0,0,10"/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="110"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="10"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="10"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+
+                                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Name" Style="{StaticResource FieldLabel}"/>
+                                        <TextBox   Grid.Row="0" Grid.Column="1" Text="{Binding SelectedProfile.Name, UpdateSourceTrigger=PropertyChanged}"/>
+
+                                        <TextBlock Grid.Row="2" Grid.Column="0" Text="PPI" Style="{StaticResource FieldLabel}"/>
+                                        <TextBox   Grid.Row="2" Grid.Column="1" Text="{Binding SelectedProfile.Ppi, UpdateSourceTrigger=LostFocus}"/>
+
+                                        <TextBlock Grid.Row="4" Grid.Column="0" Text="Bound monitor" Style="{StaticResource FieldLabel}"/>
+                                        <ComboBox  Grid.Row="4" Grid.Column="1" ItemsSource="{Binding AvailableMonitors}"
+                                                   DisplayMemberPath="Label" SelectedValuePath="DeviceName"
+                                                   SelectedValue="{Binding SelectedProfile.MonitorDeviceName}"/>
+                                    </Grid>
+
+                                    <TextBlock Text="Compute PPI from resolution" Foreground="{StaticResource TextSecondaryBrush}"
+                                               FontSize="12" Margin="0,14,0,8"/>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBox Width="64" Text="{Binding ResWidth, UpdateSourceTrigger=LostFocus}"/>
+                                        <TextBlock Text="×" VerticalAlignment="Center" Margin="6,0"/>
+                                        <TextBox Width="64" Text="{Binding ResHeight, UpdateSourceTrigger=LostFocus}"/>
+                                        <TextBlock Text="px  @" VerticalAlignment="Center" Margin="6,0"/>
+                                        <TextBox Width="52" Text="{Binding DiagonalInches, UpdateSourceTrigger=LostFocus}"/>
+                                        <TextBlock Text="&quot;" VerticalAlignment="Center" Margin="4,0,10,0"/>
+                                        <Button Content="Compute" Command="{Binding ComputePpiCommand}"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+
+        <!-- ===== Footer ===== -->
+        <Grid Grid.Row="2" Margin="0,14,0,0">
+            <TextBlock Text="{Binding StatusText}" Foreground="{StaticResource TextSecondaryBrush}"
+                       VerticalAlignment="Center" HorizontalAlignment="Left"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Reload" Command="{Binding ReloadCommand}" Margin="0,0,10,0"/>
+                <Button Content="Save" Style="{StaticResource PrimaryButton}" Command="{Binding SaveCommand}" MinWidth="90"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

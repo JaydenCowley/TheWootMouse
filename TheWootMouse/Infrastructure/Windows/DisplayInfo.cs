@@ -72,6 +72,12 @@ public static partial class DisplayInfo
     [LibraryImport("Shcore.dll")]
     private static partial int GetDpiForMonitor(IntPtr hMonitor, uint dpiType, out uint dpiX, out uint dpiY);
 
+    private delegate bool MonitorEnumProc(IntPtr hMonitor, IntPtr hdc, IntPtr lprcMonitor, IntPtr dwData);
+
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static extern bool EnumDisplayMonitors(IntPtr hdc, IntPtr lprcClip, MonitorEnumProc lpfnEnum, IntPtr dwData);
+
     /// <summary>
     /// Returns the monitor the cursor is currently over, or null if it can't be determined.
     /// </summary>
@@ -81,9 +87,24 @@ public static partial class DisplayInfo
             return null;
 
         IntPtr hMonitor = MonitorFromPoint(pt, MonitorDefaultToNearest);
-        if (hMonitor == IntPtr.Zero)
-            return null;
+        return hMonitor == IntPtr.Zero ? null : BuildMonitorInfo(hMonitor);
+    }
 
+    /// <summary>Enumerates every connected monitor (used by the UI to bind profiles to screens).</summary>
+    public static IReadOnlyList<MonitorInfo> GetAllMonitors()
+    {
+        var result = new List<MonitorInfo>();
+        EnumDisplayMonitors(IntPtr.Zero, IntPtr.Zero, (hMonitor, _, _, _) =>
+        {
+            var info = BuildMonitorInfo(hMonitor);
+            if (info != null) result.Add(info);
+            return true;
+        }, IntPtr.Zero);
+        return result;
+    }
+
+    private static MonitorInfo? BuildMonitorInfo(IntPtr hMonitor)
+    {
         var mi = new MonitorInfoEx { cbSize = Marshal.SizeOf<MonitorInfoEx>() };
         if (!GetMonitorInfo(hMonitor, ref mi))
             return null;

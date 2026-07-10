@@ -8,6 +8,10 @@ depth.
 
 - **Analog Cursor Control**: Move your mouse cursor using keyboard keys with variable speed based on how hard you press
 - **Configurable Response Curve**: Adjustable deadzone, maximum speed, and exponential response for personalized control
+- **Pixel-Density Profiles**: Keep perceived cursor speed constant across screens of differing pixel density — define a
+  profile per screen (real PPI) and have the engine auto-select it based on the monitor the cursor is on
+- **Settings App**: A dark-themed WPF UI (`WootMouseSettingsWpf`) for key bindings, mouse behavior, density profiles, and
+  a live analog preview
 - **Low Latency**: High-frequency polling (~8ms sleep) for responsive cursor movement
 - **SDK Integration**: Built on top of the official Wooting Analog SDK
 
@@ -32,7 +36,8 @@ The following keys are currently mapped to mouse movement:
 | F17 | Scroll Up   |
 | F18 | Scroll Down |
 
-**Note**: These bindings are currently hardcoded but will be user-configurable in future releases.
+**Note**: These are the default bindings. They (and all other settings) are user-configurable through the settings app —
+see [Configuration](#configuration).
 
 ## Setup
 
@@ -59,11 +64,23 @@ The following keys are currently mapped to mouse movement:
 
 ## Configuration
 
-Current configuration parameters can be adjusted in `Program.cs` when creating the `WootMouseEngine`:
+Run the **settings app** to configure everything through a UI:
 
-```csharp
-var engine = new WootMouseEngine(
-    deadzone: 0.05f,    // Minimum press threshold (0-1)
-    maxSpeed: 1400f,    // Maximum pixels per second
-    exponent: 1.6f      // Response curve exponent
-);
+```bash
+dotnet run --project WootMouseSettingsWpf
+```
+
+It lets you set key bindings, mouse behavior (deadzone, max speed, scroll speed, turbo multiplier, curve power), and
+pixel-density profiles, with a live analog preview. Settings are written to `settings.json`, which the engine
+(`TheWootMouse`) loads on startup.
+
+### Pixel-density profiles
+
+`Max Speed` is defined in px/s **at the reference PPI** (default 96). Each density profile stores a screen's true
+physical PPI; the engine scales speed by `profilePPI / referencePPI` so movement feels the same regardless of how small
+the pixels are. Enable **auto-switch** to bind profiles to monitors and have the engine pick the right one based on where
+the cursor is — no manual switching when you move between screens. You can enter PPI directly or compute it from a
+resolution + diagonal.
+
+> Note: Windows' per-monitor DPI reports the *scaling* setting, not physical pixel density, which is why profiles store
+> real PPI explicitly.
