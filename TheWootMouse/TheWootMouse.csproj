@@ -7,6 +7,9 @@
         <ApplicationIcon>Assests/wootmouse.ico</ApplicationIcon>
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <!-- Self-contained so the self-contained WPF app can reference this exe (NETSDK1150) -->
+        <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+        <SelfContained>true</SelfContained>
     </PropertyGroup>
 
     <ItemGroup>
